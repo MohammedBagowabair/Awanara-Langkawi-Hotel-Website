@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Awanara Langkawi"
+description = "A fictional premium Malaysian island resort website featuring a responsive destination-led hotel landing page, immersive guest storytelling, and an interactive stay planner."
+version = "1.0.0"
+id = "artifacts/awanara-langawi"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23535
+
+[services.development]
+run = "pnpm --filter @workspace/awanara-langawi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/awanara-langawi", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/awanara-langawi/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23535"
+BASE_PATH = "/"
