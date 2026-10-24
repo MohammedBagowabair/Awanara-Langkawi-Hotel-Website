@@ -23,8 +23,8 @@ export function detectLang(): Lang {
   try {
     const p = new URLSearchParams(window.location.search).get('lang');
     if (isLang(p)) return p;
-    const s = window.localStorage.getItem(STORAGE_KEY);
-    if (isLang(s)) return s;
+    // English is always the default on load; clear any old saved preference.
+    window.localStorage.removeItem(STORAGE_KEY);
   } catch {
     /* storage unavailable */
   }
@@ -51,11 +51,6 @@ function applyLang(lang: Lang, titleKey: string, descKey?: string) {
   root.lang = LANGS.find((l) => l.code === lang)!.html;
   root.dir = lang === 'ar' ? 'rtl' : 'ltr';
   loadFonts(lang);
-  try {
-    window.localStorage.setItem(STORAGE_KEY, lang);
-  } catch {
-    /* ignore */
-  }
   const url = new URL(window.location.href);
   if (lang === 'en') url.searchParams.delete('lang');
   else url.searchParams.set('lang', lang);
